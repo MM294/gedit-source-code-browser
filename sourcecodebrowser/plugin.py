@@ -329,8 +329,12 @@ class SourceCodeBrowserPlugin(GObject.Object, Gedit.WindowActivatable, PeasGtk.C
         self._sourcetree.show_line_numbers = self.show_line_numbers
         self._sourcetree.expand_rows = self.expand_rows
         self._sourcetree.sort_list = self.sort_list
-        panel = self.window.get_side_panel()
-        panel.add_item(self._sourcetree, "SymbolBrowserPlugin", "Source Code", self.icon)
+
+#        panel = self.window.get_side_panel()
+#        panel.add_item(self._sourcetree, "SymbolBrowserPlugin", "Source Code", self.icon)
+        stack = self.window.get_side_panel();
+        stack.add_titled(self._sourcetree, "SymbolBrowserPlugin", "Source Code");
+
         self._handlers = []
         hid = self._sourcetree.connect("focus", self.on_sourcetree_focus)
         self._handlers.append((self._sourcetree, hid))
@@ -352,8 +356,9 @@ class SourceCodeBrowserPlugin(GObject.Object, Gedit.WindowActivatable, PeasGtk.C
         for obj, hid in self._handlers:
             obj.disconnect(hid)
         self._handlers = None
-        pane = self.window.get_side_panel()
-        pane.remove_item(self._sourcetree)
+#        pane = self.window.get_side_panel()
+#        pane.remove_item(self._sourcetree)
+        pane = self.window.get_side_panel().remove(self._sourcetree)
         self._sourcetree = None
     
     def _has_settings_schema(self):
@@ -393,8 +398,8 @@ class SourceCodeBrowserPlugin(GObject.Object, Gedit.WindowActivatable, PeasGtk.C
         self._is_loaded = False
         # do not load if not the active tab in the panel
         panel = self.window.get_side_panel()
-        if not panel.item_is_active(self._sourcetree):
-            return
+        #if not panel.item_is_active(self._sourcetree):
+        #    return
 
         document = self.window.get_active_document()
         if document:
